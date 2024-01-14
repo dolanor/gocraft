@@ -594,7 +594,7 @@ func (r *LineRender) drawCross() {
 
 func (r *LineRender) drawWireFrame(mat mgl32.Mat4) {
 	var vertices []float32
-	block, _ := game.world.HitTest(game.camera.Pos(), game.camera.Front())
+	block, _ := game.world.HitTest(game.camera.Pos(), game.camera.Front(), maxLen)
 	if block == nil {
 		return
 	}

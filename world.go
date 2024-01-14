@@ -67,10 +67,9 @@ func (w *World) Collide(pos mgl32.Vec3) (mgl32.Vec3, bool) {
 	return mgl32.Vec3{x, y, z}, stop
 }
 
-func (w *World) HitTest(pos mgl32.Vec3, vec mgl32.Vec3) (*Vec3, *Vec3) {
+func (w *World) HitTest(pos mgl32.Vec3, vec mgl32.Vec3, maxLen float32) (*Vec3, *Vec3) {
 	var (
-		maxLen = float32(8.0)
-		step   = float32(0.125)
+		step = float32(0.125)
 
 		block, prev Vec3
 		pprev       *Vec3

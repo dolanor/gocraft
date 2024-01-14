@@ -23,6 +23,8 @@ var (
 	game *Game
 )
 
+const maxLen = 8
+
 type Game struct {
 	win *glfw.Window
 
@@ -138,7 +140,7 @@ func (g *Game) onMouseButtonCallback(win *glfw.Window, button glfw.MouseButton, 
 	}
 	head := NearBlock(g.camera.Pos())
 	foot := head.Down()
-	block, prev := g.world.HitTest(g.camera.Pos(), g.camera.Front())
+	block, prev := g.world.HitTest(g.camera.Pos(), g.camera.Front(), maxLen)
 	if button == glfw.MouseButton2 && action == glfw.Press {
 		if prev != nil && *prev != head && *prev != foot {
 			g.world.UpdateBlock(*prev, g.item)
@@ -147,7 +149,20 @@ func (g *Game) onMouseButtonCallback(win *glfw.Window, button glfw.MouseButton, 
 		}
 	}
 	if button == glfw.MouseButton1 && action == glfw.Press {
-		if block != nil {
+		if g.item == 64 {
+			st := g.camera.State()
+			block, _ := g.world.HitTest(g.camera.Pos(), g.camera.Front(), 1<<8)
+			if block == nil {
+				return
+			}
+			st.X = float32(block.X)
+			st.Y = float32(block.Y) + 2
+			st.Z = float32(block.Z)
+			log.Println("teleport to", st)
+			pos := mgl32.Vec3{st.X, st.Y, st.Z}
+			g.camera.SetPos(pos)
+			go ClientUpdatePlayerState(st)
+		} else if block != nil {
 			g.world.UpdateBlock(*block, 0)
 			g.dirtyBlock(*block)
 			go ClientUpdateBlock(*block, 0)
