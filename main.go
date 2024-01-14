@@ -204,6 +204,10 @@ func (g *Game) handleKeyInput(dt float64) {
 	if g.camera.flying {
 		speed = 0.2
 	}
+	// running
+	if g.win.GetKey(glfw.KeyLeftShift) == glfw.Press {
+		speed *= 2
+	}
 	if g.win.GetKey(glfw.KeyEscape) == glfw.Press {
 		g.setExclusiveMouse(false)
 	}
