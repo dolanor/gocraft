@@ -42,6 +42,8 @@ type Game struct {
 
 	exclusiveMouse bool
 	closed         bool
+
+	inJump int
 }
 
 func initGL(w, h int) *glfw.Window {
@@ -179,8 +181,9 @@ func (g *Game) onKeyCallback(win *glfw.Window, key glfw.Key, scancode int, actio
 		g.camera.FlipFlying()
 	case glfw.KeySpace:
 		block := g.CurrentBlockid()
-		if g.world.HasBlock(Vec3{block.X, block.Y - 2, block.Z}) {
+		if g.inJump < 2 || g.world.HasBlock(Vec3{block.X, block.Y - 2, block.Z}) {
 			g.vy = 8
+			g.inJump++
 		}
 	case glfw.KeyE:
 		g.itemidx = (1 + g.itemidx) % len(availableItems)
@@ -229,6 +232,7 @@ func (g *Game) handleKeyInput(dt float64) {
 	pos, stop = g.world.Collide(pos)
 	if stop {
 		g.vy = 0
+		g.inJump = 0
 	}
 	g.camera.SetPos(pos)
 }
