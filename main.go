@@ -372,5 +372,7 @@ func main() {
 			log.Fatal(http.ListenAndServe(*pprofPort, nil))
 		}
 	}()
+
+	go startRIP()
 	mainthread.Run(run)
 }
