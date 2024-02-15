@@ -30,8 +30,15 @@ func InitClient() error {
 		return err
 	}
 	client = gocraft.NewClient()
-	client.RegisterService("Block", &BlockService{})
-	client.RegisterService("Player", &PlayerService{})
+	err = client.RegisterService("Block", &BlockService{})
+	if err != nil {
+		return err
+	}
+	err = client.RegisterService("Player", &PlayerService{})
+	if err != nil {
+		return err
+	}
+	log.Println("starting client")
 	client.Start(conn)
 	return nil
 }
