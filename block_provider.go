@@ -17,10 +17,14 @@ type Block struct {
 }
 
 func (b *Block) IDFromString(s string) error {
-	coords := strings.Split(s, "x")
-	if len(coords) < 3 {
-		return errors.New("wrong id format, should be: XxYxZ")
+	x, y, z, err := coordsStringToFloat32(s)
+	if err != nil {
+		return err
 	}
+
+	b.X = x
+	b.Y = y
+	b.Z = z
 
 	return nil
 }
